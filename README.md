@@ -82,7 +82,7 @@ Operation codes are as below.
 
 * **Display the original without any change : 0 (Original)
 * Invert the image : 1 (Inversion)
-* Rotate the image by 180 degrees : 2 (Rotation by 180)
+*  Rotate the image by 180 degrees : 2 (Rotation by 180)
 * Flip the image : 3 (Flip)**
 
 If any other value is given for the operation code, the following message should be
