@@ -3,6 +3,81 @@
 
 	.global main
 
+//***********************
+flip:
+	mov r4, #0 //col count
+	mov r10, #1 //row count
+	 
+	//mul r12, r6,r11 //stack allocated for col size 
+	ldr r0, =formatFL
+		bl printf
+
+loopFLrow:
+		mul r12,r6,r10
+		mov r11,#4
+		mul r9,r12,r11
+		sub r9,r9,#4 //sub one stack
+		mov r4, #0
+		
+		
+		
+loopFLcol:
+		
+		ldr r11, [sp,r9]
+		ldr r0, =formatprint
+		mov r1,r11
+		bl printf
+		add r4, r4, #1
+		sub r9, r9, #4
+		cmp r4,r6
+		blt loopFLcol
+		ldr r0, =formatn
+		bl printf
+		
+		cmp r10,r5
+		add r10,r10 ,#1
+		blt loopFLrow
+		b exit2
+//*****************	
+
+
+
+
+
+
+//********ROTATE FUNC**********
+rotate:
+	mov r4, #0 //col count
+	mov r10, #0 //row count
+	mov r11,#4 
+	mul r9, r8,r11 //stack allocated size 
+	sub r9,r9,#4 //sub one stack 
+	ldr r0, =formatRO
+	bl printf
+
+loopROrow:
+		mov r4, #0
+		add r10,r10 ,#1
+		
+		
+loopROcol:
+		
+		ldr r11, [sp,r9]
+		ldr r0, =formatprint
+		mov r1,r11
+		bl printf
+		add r4, r4, #1
+		sub r9, r9, #4
+		cmp r4,r6
+		blt loopROcol
+		ldr r0, =formatn
+		bl printf
+		cmp r10,r5
+		blt loopROrow
+		b exit2
+//***************************
+
+//*********INVERSE Function************
 inverse:
 	mov r4, #0 //col count
 	mov r10, #0 //row count
@@ -30,17 +105,13 @@ loopINcol:
 		bl printf
 		cmp r10,r5
 		blt loopINrow
-		//cmp r8,r10
 		beq exit2
-
+//************************
 
 
 
 //*************************
 original:
-	
-	//sub sp, sp, #4
-	//tr lr, [sp, #0]
 	mov r4, #0 //col count
 	mov r10, #0 //row count
 	mov r9, #0 //stack
@@ -66,18 +137,13 @@ loopORcol:
 		bl printf
 		cmp r10,r5
 		blt loopORrow
-		//cmp r8,r10
 		b exit2
-	//*****************	
+//***********************
 
 exit2:	
 		ldr r0, =formatn
 		bl printf
 		ldr lr, [sp, #0]
-
-		//add sp, sp, #4
-		add sp,sp,r8,lsl #2	
-		//mov pc, lr
 		b exit
 
 			
@@ -141,9 +207,18 @@ loop1:
 	beq original
 	cmp r7, #1
 	beq inverse
+	cmp r7, #2
+	beq rotate
+	cmp r7, #3
+	beq flip
 	
 	
-exit:	
+	ldr r0,=formatinv
+	bl printf
+	
+	
+exit:
+	add sp,sp,r8,lsl #2		
 	ldr lr, [sp, #0]
 	add sp, sp, #4
 	mov pc, lr
@@ -155,9 +230,11 @@ exit:
 
 
 	.data	@ data memory
-formatOR : .asciz "\nOriginal\n"
-formatIN : .asciz "\nInversion\n"	
+formatinv : .asciz "Invalid operation\n"	
+formatFL : .asciz "Flip\n"	
+formatRO : .asciz "Rotation by 180\n"	
+formatOR : .asciz "Original\n"
+formatIN : .asciz "Inversion\n"	
 formatget: .asciz "%d"
 formatn: .asciz "\n"
-formatprint1: .asciz " %dss\n"
 formatprint: .asciz "%d "
