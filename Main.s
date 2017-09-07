@@ -7,15 +7,13 @@
 flip:
 	mov r4, #0 //col count
 	mov r10, #1 //row count
-	 
-	//mul r12, r6,r11 //stack allocated for col size 
-	ldr r0, =formatFL
+	ldr r0, =formatFL  //prinitng flip text
 		bl printf
 
 loopFLrow:
-		mul r12,r6,r10
-		mov r11,#4
-		mul r9,r12,r11
+		mul r12,r6,r10  //mult col*rowcount
+		mov r11,#4  //size of byte
+		mul r9,r12,r11 //moving stack to last column in stack
 		sub r9,r9,#4 //sub one stack
 		mov r4, #0
 		
@@ -141,8 +139,7 @@ loopORcol:
 //***********************
 
 exit2:	
-		ldr r0, =formatn
-		bl printf
+		
 		ldr lr, [sp, #0]
 		b exit
 
@@ -218,12 +215,10 @@ loop1:
 	
 	
 exit:
-	add sp,sp,r8,lsl #2		
+	add sp,sp,r8,lsl #2		//removing stack allowed for matrix size
 	ldr lr, [sp, #0]
 	add sp, sp, #4
 	mov pc, lr
-
-
 
 
 
